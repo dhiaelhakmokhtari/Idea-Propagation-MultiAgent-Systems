@@ -1,0 +1,47 @@
+Here’s how to read the two panels and the color‐coding in the simulator’s display:
+
+1. Grid Panel (Left)
+Each pixel represents one cell/agent in the 2D lattice.
+
+Colors encode current strategy and recent transitions:
+
+Red (0): Defector
+
+Blue (1): Cooperator
+
+Yellow (2): cells that were Cooperator → Defector in this last update
+
+Green (3): cells that were Defector → Cooperator in this last update
+
+The transitions (yellow/green) let you spot where “invasions” or switches are happening at the leading edge of clusters.
+
+2. Time‑Series Panel (Right)
+Horizontal axis (“Generation”)
+This is simply the discrete time‑step count: at generation 0 you see your initial grid; at generation 1 the first update happens; generation 2 is the second update, and so on.
+
+Vertical axis (“Fraction Cooperators”)
+At each generation the code computes
+
+python
+Copy
+Edit
+coop_frac = np.mean(self.grid)
+i.e. the proportion of all 10 000 cells that are cooperators (cells with value 1). A value of 0.5 means half the lattice are cooperators, 0.25 means a quarter, etc.
+
+Blue line
+Plots that fraction vs. generation. Watching it sweep out shows whether cooperation grows, shrinks, or oscillates over time.
+
+Red dashed line (“Theoretical limit”) at ≈ 0.318
+Many analyses of the spatial Prisoner’s Dilemma on a large 2D lattice predict that, under Moore neighborhoods and periodic boundaries, cooperators stabilize around 31.8 % of the population in the long run (for certain ranges of the defector advantage b). That horizontal line marks that benchmark. If your blue curve settles near it, your simulation is mirroring that theoretical result.
+
+Putting it together
+Early generations
+You might see rapid color transitions (lots of yellow/green) as single defectors erode cooperator clusters or vice versa.
+
+Mid‑run
+Clusters form, stabilize, and the blue curve may climb or fall toward an equilibrium.
+
+Long‑run
+The fraction of cooperators often plateaus. The red dashed line tells you “the baseline” you’d expect analytically; your simulated plateau may sit near, above, or below it depending on b, boundary type, and initial conditions.
+
+Feel free to ask if you want to dive deeper into any of these components!
